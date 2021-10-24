@@ -4,21 +4,23 @@ It should be noted that this binding does not work with earlier versions and bec
 
 This bash script requires several prerequisites for a gnu / linux distribution like Debian / Ubuntu:
 
-                sudo apt install swig4.0 \
-                        swig4.0-doc \
-                        swig4.0-examples \
-                        pkg-config \
-                        gcc \
-                        g ++ \
-                        cmake \
-                        tcl \
-                        tclsh \
-                        findutils \
-                        python3.9-dev \
-                        libpython3.9-dev \
-                        libc-bin \
-                        libssl-dev \
-                        build-essential
+```
+$ sudo apt install swig4.0 \
+                   swig4.0-doc \
+                   swig4.0-examples \
+                   pkg-config \
+                   gcc \
+                   g++ \
+                   cmake \
+                   tcl \
+                   tclsh \
+                   findutils \
+                   python3.9-dev \
+                   libpython3.9-dev \
+                   libc-bin \
+                   libssl-dev \
+                   build-essential
+```
 
 The script checks in the preamble whether dependencies are required.
 
@@ -32,6 +34,7 @@ After having checked the dependencies necessary for the correct functioning of t
 
 The bash script "binding.sh" currently runs without any parameters:
 
+```
  $ ./binding.sh
   ____ ____ ____ ____ __ __ _ ____ __ __ _ ___ ___ ____ __ _ ____ ____ __ ____ __ ____
  / ___) (_ \ (_ _) (_ \ () ((\ (\ () ((\ / __) / __) (__) ((\ (__) (_ \ / _ \ (_ _) / \ (_ \
@@ -860,9 +863,11 @@ None
 -------------------------------------------------------
                   END  OF  PROCESS                     
 -------------------------------------------------------
+```
 
 Once executed, a working directory will contain all the working files, including the SRT library built from the official sdk (libsrt.so, libsrt.so.1.4, libsrt.so.1.4.4) but also its binding (_srt.so and srt.py).
 
+```
 tree ./tmp/o8MWLGyaGi/
 ├── delivery
 │   ├── sdk
@@ -907,30 +912,40 @@ tree ./tmp/o8MWLGyaGi/
 │   │                   └── srt.pc
 │   ├── srt.py
 │   └── _srt.so
+```
 
 The SRT python binding is composed of two files: srt.py which is the visible/top part of the iceberg and _srt.so which is the hidden/internal/bottom part.
 
 Those two files can be installed at the system level (/usr/lib/python3.9/), stay in the current path or located in another directory using the PYTHONPATH environment's variable :
 
+```
 $ export PYTHONPATH=${PYTHONPATH}:${HOME}/py_srt_binding
+```
 
 As for the Haivision srt library, if no similar library is already installed, it is possible to deploy it at the system level (ex: /usr/local/lib/) then to update the loader cache for the editor dynamic links:
 
+```
 $ sudo ldconfig
+```
 
 To check if a similar library was already installed at the system level:
 
+```
 $ ldconfig -p | grep libsrt.so
 libsrt.so.1.4 (libc6, x86-64) => /usr/local/lib/libsrt.so.1.4
 libsrt.so (libc6, x86-64) => /usr/local/lib/libsrt.so
+```
 
 Otherwise, it is possible to override the search:
 
+```
 $ cd tmp /o8MWLGyaGi/delivery/
 $ export LD_LIBRARY_PATH=$PWD/sdk/usr/local/lib
+```
 
 Once everything is in place, it is possible to import the binding into a python interpreter:
 
+```
 $ python3
 Python 3.8.10 (default, Sep 28 2021, 16:10:42)
 [GCC 9.3.0] on linux
@@ -957,6 +972,7 @@ All Rights Reserved.
 Copyright (c) 1991-1995 Stichting Mathematisch Centrum, Amsterdam.
 All Rights Reserved., 'credits':     Thanks to CWI, CNRI, BeOpen.com, Zope Corporation and a cast of thousands
     for supporting Python development.  See www.python.org for more information., 'license': Type license() to see the full license text, 'help': Type help() for interactive help, or help(object) for help about object., '_': <class 'module'>}), ('__cached__', '/home/tgayet/Workspace/Python-binding-for-libsrt/tmp/yUiiAO2YWQ/__pycache__/srt.cpython-38.pyc'), ('__doc__', None), ('__file__', '/home/tgayet/Workspace/Python-binding-for-libsrt/tmp/yUiiAO2YWQ/srt.py'), ('__loader__', <_frozen_importlib_external.SourceFileLoader object at 0x7f348c9f1e50>), ('__name__', 'srt'), ('__package__', ''), ('__spec__', ModuleSpec(name='srt', loader=<_frozen_importlib_external.SourceFileLoader object at 0x7f348c9f1e50>, origin='/home/tgayet/Workspace/Python-binding-for-libsrt/tmp/yUiiAO2YWQ/srt.py')), ('_srt', <module '_srt' from '/home/tgayet/Workspace/Python-binding-for-libsrt/tmp/yUiiAO2YWQ/_srt.so'>), ('_swig_add_metaclass', <function _swig_add_metaclass at 0x7f348ca09ca0>), ('_swig_python_version_info', sys.version_info(major=3, minor=8, micro=10, releaselevel='final', serial=0)), ('_swig_repr', <function _swig_repr at 0x7f348ca09a60>), ('_swig_setattr_nondynamic_class_variable', <function _swig_setattr_nondynamic_class_variable at 0x7f348ca09c10>), ('_swig_setattr_nondynamic_instance_variable', <function _swig_setattr_nondynamic_instance_variable at 0x7f348ca09b80>), ('cvar', <Swig global variables>), ('srt_accept', <function srt_accept at 0x7f348c900430>), ('srt_accept_bond', <function srt_accept_bond at 0x7f348c9004c0>), ('srt_addlogfa', <function srt_addlogfa at 0x7f348c9150d0>), ('srt_bind', <function srt_bind at 0x7f348c9001f0>), ('srt_bind_acquire', <function srt_bind_acquire at 0x7f348c900280>), ('srt_bind_peerof', <function srt_bind_peerof at 0x7f348c900310>), ('srt_bistats', <function srt_bistats at 0x7f348c90f670>), ('srt_bstats', <function srt_bstats at 0x7f348c90f5e0>), ('srt_cleanup', <function srt_cleanup at 0x7f348c900040>), ('srt_clearlasterror', <function srt_clearlasterror at 0x7f348c90f550>), ('srt_clock_type', <function srt_clock_type at 0x7f348c915790>), ('srt_close', <function srt_close at 0x7f348c9008b0>), ('srt_connect', <function srt_connect at 0x7f348c900670>), ('srt_connect_bind', <function srt_connect_bind at 0x7f348c900790>), ('srt_connect_callback', <function srt_connect_callback at 0x7f348c9005e0>), ('srt_connect_debug', <function srt_connect_debug at 0x7f348c900700>), ('srt_connection_time', <function srt_connection_time at 0x7f348c915700>), ('srt_create_socket', <function srt_create_socket at 0x7f348c900160>), ('srt_dellogfa', <function srt_dellogfa at 0x7f348c915160>), ('srt_epoll_add_ssock', <function srt_epoll_add_ssock at 0x7f348c90f940>), ('srt_epoll_add_usock', <function srt_epoll_add_usock at 0x7f348c90f8b0>), ('srt_epoll_clear_usocks', <function srt_epoll_clear_usocks at 0x7f348c90f820>), ('srt_epoll_create', <function srt_epoll_create at 0x7f348c90f790>), ('srt_epoll_release', <function srt_epoll_release at 0x7f348c90ff70>), ('srt_epoll_remove_ssock', <function srt_epoll_remove_ssock at 0x7f348c90fa60>), ('srt_epoll_remove_usock', <function srt_epoll_remove_usock at 0x7f348c90f9d0>), ('srt_epoll_set', <function srt_epoll_set at 0x7f348c90fee0>), ('srt_epoll_update_ssock', <function srt_epoll_update_ssock at 0x7f348c90fb80>), ('srt_epoll_update_usock', <function srt_epoll_update_usock at 0x7f348c90faf0>), ('srt_epoll_uwait', <function srt_epoll_uwait at 0x7f348c90fca0>), ('srt_epoll_wait', <function srt_epoll_wait at 0x7f348c90fc10>), ('srt_getlasterror', <function srt_getlasterror at 0x7f348c90f430>), ('srt_getlasterror_str', <function srt_getlasterror_str at 0x7f348c90f3a0>), ('srt_getpeername', <function srt_getpeername at 0x7f348c900940>), ('srt_getrejectreason', <function srt_getrejectreason at 0x7f348c915430>), ('srt_getsndbuffer', <function srt_getsndbuffer at 0x7f348c9153a0>), ('srt_getsockflag', <function srt_getsockflag at 0x7f348c900b80>), ('srt_getsockname', <function srt_getsockname at 0x7f348c9009d0>), ('srt_getsockopt', <function srt_getsockopt at 0x7f348c900a60>), ('srt_getsockstate', <function srt_getsockstate at 0x7f348c90f700>), ('srt_getversion', <function srt_getversion at 0x7f348c9155e0>), ('srt_listen', <function srt_listen at 0x7f348c9003a0>), ('srt_listen_callback', <function srt_listen_callback at 0x7f348c900550>), ('srt_msgctrl_default', <srt.SRT_MSGCTRL; proxy of <Swig Object of type 'SRT_MsgCtrl_ *' at 0x7f348c8ee960> >), ('srt_msgctrl_init', <function srt_msgctrl_init at 0x7f348c900ca0>), ('srt_recv', <function srt_recv at 0x7f348c90f0d0>), ('srt_recvfile', <function srt_recvfile at 0x7f348c90f310>), ('srt_recvmsg', <function srt_recvmsg at 0x7f348c90f160>), ('srt_recvmsg2', <function srt_recvmsg2 at 0x7f348c90f1f0>), ('srt_rejectreason_msg', <Swig Object of type 'char **' at 0x7f348c8eeab0>), ('srt_rejectreason_str', <function srt_rejectreason_str at 0x7f348c915550>), ('srt_rendezvous', <function srt_rendezvous at 0x7f348c900820>), ('srt_resetlogfa', <function srt_resetlogfa at 0x7f348c9151f0>), ('srt_send', <function srt_send at 0x7f348c900ee0>), ('srt_sendfile', <function srt_sendfile at 0x7f348c90f280>), ('srt_sendmsg', <function srt_sendmsg at 0x7f348c900f70>), ('srt_sendmsg2', <function srt_sendmsg2 at 0x7f348c90f040>), ('srt_setlogflags', <function srt_setlogflags at 0x7f348c915310>), ('srt_setloghandler', <function srt_setloghandler at 0x7f348c915280>), ('srt_setloglevel', <function srt_setloglevel at 0x7f348c915040>), ('srt_setrejectreason', <function srt_setrejectreason at 0x7f348c9154c0>), ('srt_setsockflag', <function srt_setsockflag at 0x7f348c900c10>), ('srt_setsockopt', <function srt_setsockopt at 0x7f348c900af0>), ('srt_socket', <function srt_socket at 0x7f348c9000d0>), ('srt_startup', <function srt_startup at 0x7f348ca09d30>), ('srt_strerror', <function srt_strerror at 0x7f348c90f4c0>), ('srt_time_now', <function srt_time_now at 0x7f348c915670>)]
+```
 
 Thank you for your interest in this work and if you ever have any comments or if you observe something problematic please return it by email : Thierry.Gayet@dazzl.tv
 
