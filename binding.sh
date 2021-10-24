@@ -1,19 +1,19 @@
 #!/bin/bash
-
+#
 # MIT License
-
+#
 # Copyright (c) 2021 Dazzl
-
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,6 +21,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+#
 
 VERSION="0.1"
 #DEBUG="1"
@@ -321,17 +322,25 @@ function link_binking()
 function install_binding()
 {
     cd ${DIR_PATH}/
-    if [ -e "${DIR_PATH}/_srt.so" ]; then
+    ls -al ${DIR_PATH}/_srt.so
+    ls -al ${DIR_PATH}/srt.py
+    if [ -e "${DIR_PATH}/_srt.so" ] && [ -e "${DIR_PATH}/srt.py" ]; then
         echo " [INSTALL] Installing binding into delivery path "
-        if [ ! -d "${DIR_PATH}/delivery/sdk/usr/lib/python3.9/" ]; then
-            mkdir -p ${DIR_PATH}/delivery/sdk/usr/lib/python3.9/
-        fi
-        # copy the python binding for the libsrt
-        cp _srt.so ${DIR_PATH}/delivery/sdk/usr/lib/python3.9/
-        cp _srt.so ${DIR_PATH}/delivery/
+        for FILE in {"${DIR_PATH}/_srt.so","${DIR_PATH}/srt.py"}; do
+            for PYTHON_VERSION in {"3.6","3.7","3.8","3.9","3.10"}; do
+                # --- Check if the directory exist
+                if [ ! -d "${DIR_PATH}/delivery/sdk/usr/lib/python${PYTHON_VERSION}/" ]; then
+                    mkdir -p ${DIR_PATH}/delivery/sdk/usr/lib/python${PYTHON_VERSION}/
+                fi
+                # --- Copy files needed for the srt python3 binding            
+                cp ${FILE} ${DIR_PATH}/delivery/sdk/usr/lib/python${PYTHON_VERSION}/               
+            done
+            cp ${FILE} ${DIR_PATH}/delivery/
+        done        
     else
-        echo " [ERROR] Missing srt.so ! "
+        echo " [ERROR] Missing ${DIR_PATH}/srt.so and/or ${DIR_PATH}/srt.py ! "
     fi
+    cp ${TOPDIR}/examples/*.py .
 }
 
 # python3 -v
@@ -347,22 +356,27 @@ function install_binding()
 function check_binding()
 {
     cd ${DIR_PATH}/
-    echo " "
+    if [ -e "${DIR_PATH}/srt_check.py" ]; then
+        python3 ${DIR_PATH}/srt_check.py
+    else
+        echo " [ERROR] Missing ${DIR_PATH}/srt_check.py test script !"
+    fi
 }
 
 function test_binding()
 {
     cd ${DIR_PATH}/
-    echo " "
+    
+    # TBD
+
 }
 
 function go_final_delivery()
  {   
+    echo ""
     echo "-------------------------------------------------------"
     echo "                  END  OF  PROCESS                     "
     echo "-------------------------------------------------------"
-    #cd ${DIR_PATH}/delivery/
-    tree ${DIR_PATH}/delivery/
 }
 
 function main()
@@ -372,14 +386,18 @@ function main()
     create_temp_directy
     echo " [MAKE] Working directory : ${DIR_PATH}/ "
     get_srt_sdk
-    # ---
     generate_binding
     compile_binding
     link_binking
     install_binding
-    # ---
+    echo ""
+    tree ${DIR_PATH}
+    echo ""
+    echo "-------------------------------------------------------"
+    echo ""
     check_binding
-    test_binding
+    #test_binding
+    go_final_delivery
 }
 
 # --- Main entry
